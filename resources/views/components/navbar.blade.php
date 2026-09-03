@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg bg-white border-bottom">
     <div class="container">
 
-        <a class="navbar-brand fw-bold" href="{{ route('home') }}">
+        <a class="navbar-brand fw-bold" href="{{ route('home.index') }}">
             Clothis
         </a>
 
@@ -16,7 +16,7 @@
             <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
 
                 <li class="nav-item">
-                    <a class="nav-link active" href="{{ route('home') }}">
+                    <a class="nav-link active" href="{{ route('home.index') }}">
                         Home
                     </a>
                 </li>
