@@ -5,3 +5,5 @@ use App\Http\Controllers\HomeController;
 
 Route::get('/', [HomeController::class, 'index'])
     ->name('home');
+
+Route::resource('admin', App\Http\Controllers\AdminController::class);
