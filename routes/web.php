@@ -1,9 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Admin\AuthController;
 
-Route::get('/', [HomeController::class, 'index'])
-    ->name('home');
+Route::get('/admin/login', [AuthController::class, 'showLogin'])
+    ->name('admin.login');
 
-Route::resource('admin', App\Http\Controllers\AdminController::class);
+Route::post('/admin/login', [AuthController::class, 'login'])
+    ->name('admin.login.process');
+
+Route::post('/admin/logout', [AuthController::class, 'logout'])
+    ->name('admin.logout');
