@@ -8,6 +8,6 @@ Route::resource('home', HomeController::class)
     ->only(['index']);
 
 Route::resource('products', ProductController::class)
-    ->only(['index']);
+    ->only(['index', 'show']);
 
 Route::redirect('/', '/home');
