@@ -83,3 +83,87 @@
                             </div>
 
                         </div>
+                        
+                           <!-- UKURAN -->
+                        <div class="form-group">
+
+                            <label>Pilih Ukuran</label>
+
+                            <div class="size-list">
+
+                                <label>
+                                    <input type="radio" name="ukuran" value="S" checked>
+                                    <span>S</span>
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="ukuran" value="M">
+                                    <span>M</span>
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="ukuran" value="L">
+                                    <span>L</span>
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="ukuran" value="XL">
+                                    <span>XL</span>
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="ukuran" value="2XL">
+                                    <span>2XL</span>
+                                </label>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- MODEL -->
+                        <div class="form-group">
+
+                            <label>Model</label>
+
+                            <select name="model" class="form-control">
+                                <option value="Regular">Regular</option>
+                                <option value="Oversized">Oversized</option>
+                                <option value="Long Sleeve">Long Sleeve</option>
+                            </select>
+
+                        </div>
+
+
+                        <!-- JUMLAH -->
+                        <div class="form-group">
+
+                            <label>Jumlah</label>
+
+                            <div class="quantity">
+
+                                <button
+                                    type="button"
+                                    onclick="kurang()"
+                                >
+                                    −
+                                </button>
+
+                                <input
+                                    type="number"
+                                    name="jumlah"
+                                    id="jumlah"
+                                    value="1"
+                                    min="1"
+                                >
+
+                                <button
+                                    type="button"
+                                    onclick="tambah()"
+                                >
+                                    +
+                                </button>
+
+                            </div>
+
+                        </div>
