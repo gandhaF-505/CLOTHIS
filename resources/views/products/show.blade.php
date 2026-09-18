@@ -167,3 +167,65 @@
                             </div>
 
                         </div>
+
+                         <!-- UPLOAD -->
+                        <div class="form-group">
+
+                            <label>Upload Desain</label>
+
+                            <div class="upload">
+
+                                <input
+                                    type="file"
+                                    name="desain"
+                                    accept=".jpg,.jpeg,.png,.pdf"
+                                >
+
+                                <strong>
+                                    Pilih file desain
+                                </strong>
+
+                                <small>
+                                    JPG, PNG atau PDF
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- CATATAN -->
+                        <div class="form-group">
+
+                            <label>Catatan</label>
+
+                            <textarea
+                                name="catatan"
+                                rows="4"
+                                placeholder="Tambahkan catatan untuk pesanan..."
+                            ></textarea>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="btn-custom"
+                        >
+                            Pesan Sekarang →
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@endsection
+
