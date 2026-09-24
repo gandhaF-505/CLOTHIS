@@ -1,118 +1,319 @@
 @extends('layouts.app')
 
-@section('title', 'Custom Product')
+@section('title', 'Custom Product - CLOTHIS')
 
 @section('content')
 
-<div class="custom-page">
+<style>
+    .pesanan {
+        background: #f7f7f7;
+        padding: 35px 0 60px;
+    }
+
+    .atas {
+        margin-bottom: 20px;
+    }
+
+    .atas a {
+        color: #333;
+        text-decoration: none;
+        font-size: 9px;
+    }
+
+    .foto-produk {
+        height: 500px;
+        background: #e9e9e9;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .foto-produk img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .foto-produk span {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        z-index: 2;
+        background: white;
+        padding: 6px 9px;
+        font-size: 7px;
+        font-weight: bold;
+    }
+
+    .form-pesan {
+        background: white;
+        border: 1px solid #ddd;
+        padding: 25px;
+    }
+
+    .form-pesan > small {
+        font-size: 7px;
+        letter-spacing: 1px;
+        color: #777;
+    }
+
+    .form-pesan h1 {
+        font-size: 28px;
+        margin: 8px 0;
+    }
+
+    .form-pesan h3 {
+        font-size: 17px;
+        margin-bottom: 12px;
+    }
+
+    .form-pesan > p {
+        color: #666;
+        font-size: 9px;
+        line-height: 1.6;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .bagian {
+        margin-top: 18px;
+    }
+
+    .bagian > label {
+        display: block;
+        font-size: 9px;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    .pilihan {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .pilihan label {
+        font-size: 8px;
+    }
+
+    .ukuran {
+        display: flex;
+        gap: 7px;
+    }
+
+    .ukuran input {
+        display: none;
+    }
+
+    .ukuran span {
+        display: block;
+        width: 45px;
+        padding: 9px;
+        text-align: center;
+        border: 1px solid #ccc;
+        font-size: 8px;
+        cursor: pointer;
+    }
+
+    .ukuran input:checked + span {
+        border: 2px solid #111;
+    }
+
+    .form-control {
+        font-size: 9px;
+        border-radius: 0;
+    }
+
+    .jumlah {
+        display: flex;
+    }
+
+    .jumlah button {
+        width: 35px;
+        border: 1px solid #ccc;
+        background: white;
+    }
+
+    .jumlah input {
+        width: 55px;
+        text-align: center;
+        border: 1px solid #ccc;
+    }
+
+    .upload-file {
+        position: relative;
+        padding: 25px;
+        text-align: center;
+        border: 1px dashed #aaa;
+        background: #fafafa;
+    }
+
+    .upload-file input {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .upload-file strong {
+        display: block;
+        font-size: 9px;
+    }
+
+    .upload-file small {
+        font-size: 7px;
+        color: #777;
+    }
+
+    .bagian textarea {
+        width: 100%;
+        border: 1px solid #ccc;
+        padding: 10px;
+        font-size: 9px;
+        resize: vertical;
+    }
+
+    .tombol-pesan {
+        width: 100%;
+        margin-top: 20px;
+        padding: 12px;
+        border: 1px solid #111;
+        background: #111;
+        color: white;
+        font-size: 9px;
+    }
+
+    .tombol-pesan:hover {
+        background: white;
+        color: #111;
+    }
+
+    @media (max-width: 767px) {
+        .pesanan {
+            padding: 25px 15px 50px;
+        }
+
+        .foto-produk {
+            height: 350px;
+        }
+
+        .form-pesan {
+            padding: 18px;
+        }
+
+        .form-pesan h1 {
+            font-size: 23px;
+        }
+    }
+</style>
+
+<section class="pesanan">
 
     <div class="container">
 
-        <div class="custom-header">
+        <div class="atas">
             <a href="{{ route('products.index') }}">
-                 Kembali ke Products
+                ← Kembali ke Products
             </a>
         </div>
 
         <div class="row g-4">
 
-            <!-- GAMBAR PRODUK -->
             <div class="col-lg-6">
 
-                <div class="custom-image">
+                <div class="foto-produk">
+
                     <span>CUSTOM</span>
 
                     <img
-                        src="{{ asset('images/' . $product['image']) }}"
-                        alt="{{ $product['name'] }}"
+                        src="{{ asset('images/' . $product->image) }}"
+                        alt="{{ $product->name }}"
                     >
+
                 </div>
 
             </div>
 
-
-            <!-- FORM CUSTOM -->
             <div class="col-lg-6">
 
-                <div class="custom-form">
+                <div class="form-pesan">
 
                     <small>CUSTOM PRODUCT</small>
 
-                    <h1>{{ $product['name'] }}</h1>
+                    <h1>{{ $product->name }}</h1>
 
                     <h3>
-                        Rp. {{ $product['price'] }}
+                        Rp. {{ number_format($product->price, 0, ',', '.') }}
                     </h3>
 
                     <p>
-                        {{ $product['description'] }}
+                        {{ $product->description }}
                     </p>
 
-
-                    <form action="#" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('orders.store') }}" method="POST" enctype="multipart/form-data">
 
                         @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        
+                        <div class="bagian">
 
-                        <!-- WARNA -->
-                        <div class="form-group">
+                            <label>COLOR</label>
 
-                            <label>Pilih Warna</label>
-
-                            <div class="option-list">
+                            <div class="pilihan">
 
                                 <label>
-                                    <input type="radio" name="warna" value="Putih" checked>
+                                    <input type="radio" name="color" value="Putih" checked>
                                     Putih
                                 </label>
 
                                 <label>
-                                    <input type="radio" name="warna" value="Hitam">
+                                    <input type="radio" name="color" value="Hitam">
                                     Hitam
                                 </label>
 
                                 <label>
-                                    <input type="radio" name="warna" value="Navy">
+                                    <input type="radio" name="color" value="Navy">
                                     Navy
                                 </label>
 
                                 <label>
-                                    <input type="radio" name="warna" value="Cream">
+                                    <input type="radio" name="color" value="Cream">
                                     Cream
                                 </label>
 
                             </div>
 
                         </div>
-                        
-                           <!-- UKURAN -->
-                        <div class="form-group">
 
-                            <label>Pilih Ukuran</label>
+                        <div class="bagian">
 
-                            <div class="size-list">
+                            <label>SIZE</label>
+
+                            <div class="ukuran">
 
                                 <label>
-                                    <input type="radio" name="ukuran" value="S" checked>
+                                    <input type="radio" name="size" value="S">
                                     <span>S</span>
                                 </label>
 
                                 <label>
-                                    <input type="radio" name="ukuran" value="M">
+                                    <input type="radio" name="size" value="M" checked>
                                     <span>M</span>
                                 </label>
 
                                 <label>
-                                    <input type="radio" name="ukuran" value="L">
+                                    <input type="radio" name="size" value="L">
                                     <span>L</span>
                                 </label>
 
                                 <label>
-                                    <input type="radio" name="ukuran" value="XL">
+                                    <input type="radio" name="size" value="XL">
                                     <span>XL</span>
                                 </label>
 
                                 <label>
-                                    <input type="radio" name="ukuran" value="2XL">
+                                    <input type="radio" name="size" value="2XL">
                                     <span>2XL</span>
                                 </label>
 
@@ -120,11 +321,9 @@
 
                         </div>
 
+                        <div class="bagian">
 
-                        <!-- MODEL -->
-                        <div class="form-group">
-
-                            <label>Model</label>
+                            <label>MODEL</label>
 
                             <select name="model" class="form-control">
                                 <option value="Regular">Regular</option>
@@ -134,84 +333,63 @@
 
                         </div>
 
+                        <div class="bagian">
 
-                        <!-- JUMLAH -->
-                        <div class="form-group">
+                            <label>QUANTITY</label>
 
-                            <label>Jumlah</label>
+                            <div class="jumlah">
 
-                            <div class="quantity">
-
-                                <button
-                                    type="button"
-                                    onclick="kurang()"
-                                >
-                                    −
-                                </button>
+                                <button type="button" onclick="kurang()">−</button>
 
                                 <input
                                     type="number"
-                                    name="jumlah"
+                                    name="quantity"
                                     id="jumlah"
                                     value="1"
                                     min="1"
                                 >
 
-                                <button
-                                    type="button"
-                                    onclick="tambah()"
-                                >
-                                    +
-                                </button>
+                                <button type="button" onclick="tambah()">+</button>
 
                             </div>
 
                         </div>
 
-                         <!-- UPLOAD -->
-                        <div class="form-group">
+                        <div class="bagian">
 
-                            <label>Upload Desain</label>
+                            <label>UPLOAD DESIGN</label>
 
-                            <div class="upload">
+                            <div class="upload-file">
 
                                 <input
                                     type="file"
-                                    name="desain"
+                                    name="design"
                                     accept=".jpg,.jpeg,.png,.pdf"
                                 >
 
-                                <strong>
-                                    Pilih file desain
-                                </strong>
+                                <strong>Upload your design</strong>
 
                                 <small>
-                                    JPG, PNG atau PDF
+                                    JPG, JPEG, PNG or PDF
                                 </small>
 
                             </div>
 
                         </div>
 
+                        <div class="bagian">
 
-                        <!-- CATATAN -->
-                        <div class="form-group">
-
-                            <label>Catatan</label>
+                            <label>NOTES</label>
 
                             <textarea
-                                name="catatan"
+                                name="notes"
                                 rows="4"
-                                placeholder="Tambahkan catatan untuk pesanan..."
+                                placeholder="Tulis detail atau permintaan tambahan..."
                             ></textarea>
 
                         </div>
 
-
-                        <button
-                            type="submit"
-                            class="btn-custom"
-                        >
+                        <button type="submit" class="tombol-pesan">
                             Pesan Sekarang →
                         </button>
 
@@ -225,7 +403,25 @@
 
     </div>
 
-</div>
+</section>
 
 @endsection
 
+@section('scripts')
+
+<script>
+function tambah() {
+    let jumlah = document.getElementById('jumlah');
+    jumlah.value = parseInt(jumlah.value) + 1;
+}
+
+function kurang() {
+    let jumlah = document.getElementById('jumlah');
+
+    if (parseInt(jumlah.value) > 1) {
+        jumlah.value = parseInt(jumlah.value) - 1;
+    }
+}
+</script>
+
+@endsection

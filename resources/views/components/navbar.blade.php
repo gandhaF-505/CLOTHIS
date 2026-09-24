@@ -2,58 +2,88 @@
     <div class="container">
 
         <a class="navbar-brand fw-bold" href="{{ route('home.index') }}">
-            Clothis
+            CLOTHIS
         </a>
 
-        <button class="navbar-toggler" type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarMenu">
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarContent"
+            aria-controls="navbarContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+        >
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarMenu">
+        <div class="collapse navbar-collapse" id="navbarContent">
 
-            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 
                 <li class="nav-item">
-                    <a class="nav-link active" href="{{ route('home.index') }}">
+                    <a
+                        class="nav-link {{ request()->routeIs('home.index') ? 'active' : '' }}"
+                        href="{{ route('home.index') }}"
+                    >
                         Home
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('products.index') }}">
+                    <a
+                        class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}"
+                        href="{{ route('products.index') }}"
+                    >
                         Products
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        Process
+                    <a
+                        class="nav-link {{ request()->routeIs('orders.*') ? 'active' : '' }}"
+                        href="{{ route('orders.index') }}"
+                    >
+                        Pesanan
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        Dashboard
+                    <a class="nav-link" href="{{ route('home.index') }}#about">
+                        About
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('home.index') }}#contact">
+                        Contact
                     </a>
                 </li>
 
             </ul>
 
-            <div class="d-flex gap-2">
-
-                <a href="#" class="btn btn-outline-dark btn-sm">
-                    Login
-                </a>
-
-                <a href="#" class="btn btn-dark btn-sm">
-                    Get Started
-                </a>
-
-            </div>
-
         </div>
 
     </div>
 </nav>
+
+<style>
+    .navbar {
+        padding: 18px 0;
+    }
+
+    .navbar-brand {
+        font-size: 22px;
+        letter-spacing: 1px;
+    }
+
+    .navbar .nav-link {
+        color: #555;
+        margin-left: 18px;
+    }
+
+    .navbar .nav-link:hover,
+    .navbar .nav-link.active {
+        color: #111;
+    }
+</style>

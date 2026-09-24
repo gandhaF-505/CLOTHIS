@@ -2,63 +2,68 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
+use Illuminate\Http\Request;
+
 class ProductController extends Controller
 {
     public function index()
     {
-        $products = [
-            [
-                'name' => 'Heavyweight Cotton Blank',
-                'price' => '790.000',
-                'image' => 'sablon.png',
-                'description' => 'Bahan cotton premium dengan struktur kokoh dan nyaman digunakan.'
-            ],
-            [
-                'name' => 'Premium Cotton Tee',
-                'price' => '650.000',
-                'image' => 'sablon2.png',
-                'description' => 'Kaos cotton dengan bahan lembut dan cocok untuk custom printing.'
-            ],
-            [
-                'name' => 'Custom Oversized Tee',
-                'price' => '850.000',
-                'image' => 'sablon3.png',
-                'description' => 'Model oversized yang cocok untuk desain custom.'
-            ]
-        ];
+        $products = Product::latest()->paginate(10);
 
         return view('products.index', compact('products'));
     }
 
-    public function show($id)
+    public function create()
     {
-        $products = [
-            1 => [
-                'name' => 'Heavyweight Cotton Blank',
-                'price' => '790.000',
-                'image' => 'sablon.png',
-                'description' => 'Bahan cotton premium dengan struktur kokoh dan nyaman digunakan.'
-            ],
-            2 => [
-                'name' => 'Premium Cotton Tee',
-                'price' => '650.000',
-                'image' => 'sablon2.png',
-                'description' => 'Kaos cotton dengan bahan lembut dan cocok untuk custom printing.'
-            ],
-            3 => [
-                'name' => 'Custom Oversized Tee',
-                'price' => '850.000',
-                'image' => 'sablon3.png',
-                'description' => 'Model oversized yang cocok untuk desain custom.'
-            ]
-        ];
+        return view('products.create');
+    }
 
-        if (!isset($products[$id])) {
-            abort(404);
-        }
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:128'],
+            'price' => ['required', 'numeric'],
+            'description' => ['required', 'string'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+        ]);
 
-        $product = $products[$id];
+        Product::create($validated);
 
+        return redirect()->route('products.index')
+            ->with('success', 'Product created successfully.');
+    }
+
+    public function show(Product $product)
+    {
         return view('products.show', compact('product'));
+    }
+
+    public function edit(Product $product)
+    {
+        return view('products.edit', compact('product'));
+    }
+
+    public function update(Request $request, Product $product)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:128'],
+            'price' => ['required', 'numeric'],
+            'description' => ['required', 'string'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+        ]);
+
+        $product->update($validated);
+
+        return redirect()->route('products.index')
+            ->with('success', 'Product updated successfully.');
+    }
+
+    public function destroy(Product $product)
+    {
+        $product->delete();
+
+        return redirect()->route('products.index')
+            ->with('success', 'Product deleted successfully.');
     }
 }
