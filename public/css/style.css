@@ -1,0 +1,25 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: #111;
+    background: #fff;
+}
+
+.navbar {
+    min-height: 65px;
+}
+
+.navbar-brand {
+    font-size: 18px;
+    letter-spacing: -0.5px;
+}
+
+.nav-link {
+    font-size: 13px;
+    color: #111 !important;
+    margin-left: 15px;
+}
+
+.nav-link:hover {
+    color: #777 !important;
+}
