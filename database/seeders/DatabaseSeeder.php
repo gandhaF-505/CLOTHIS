@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,13 +13,17 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AdminSeeder::class,
             ProductSeeder::class,
+            PaymentSeeder::class,
         ]);
 
-        User::factory()->create([
-            'name' => 'Test Customer',
-            'email' => 'test@example.com',
-            'password' => 'password',
-            'role' => 'customer',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'test@example.com'],
+            [
+                'name' => 'Test Customer',
+                'email_verified_at' => now(),
+                'password' => Hash::make('password'),
+                'role' => 'customer',
+            ]
+        );
     }
 }

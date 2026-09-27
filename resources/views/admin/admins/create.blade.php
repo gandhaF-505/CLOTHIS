@@ -1,12 +1,116 @@
 @extends('admin.layout')
+
 @section('title', 'Tambah Admin')
 @section('heading', 'Tambah Admin')
+
 @section('content')
-<div class="panel" style="max-width:700px;"><h2>Data Akun Admin</h2><p class="deskripsi" style="margin-bottom:22px;">Form tampilan siap dihubungkan ke proses penyimpanan akun admin.</p><form action="{{ route('admin.admins.action') }}" method="POST" class="form-grid">@csrf
-<div class="field field-full"><label>Nama</label><input class="input" name="name" placeholder="Nama admin"></div>
-<div class="field field-full"><label>Email</label><input class="input" type="email" name="email" placeholder="admin@clothis.test"></div>
-<div class="field"><label>Password</label><input class="input" type="password" name="password" placeholder="Password"></div>
-<div class="field"><label>Role</label><select class="input" name="role"><option value="admin">Admin</option></select></div>
-<div class="field-full" style="display:flex;justify-content:flex-end;gap:8px;"><a href="{{ route('admin.admins.index') }}" class="tombol tombol-putih">Batal</a><button class="tombol">Simpan Admin</button></div>
-</form></div>
+
+<div class="deskripsi">
+    Tambahkan akun admin baru.
+</div>
+
+@if($errors->any())
+
+    <div style="margin-top:20px; padding:12px 16px; background:#fdecec; color:#9b1c1c; border-radius:8px;">
+
+        @foreach($errors->all() as $error)
+
+            <div>
+                {{ $error }}
+            </div>
+
+        @endforeach
+
+    </div>
+
+@endif
+
+<div class="panel" style="margin-top:20px;">
+
+    <form
+        action="{{ route('admin.admins.action') }}"
+        method="POST"
+    >
+
+        @csrf
+
+        <input
+            type="hidden"
+            name="action"
+            value="create"
+        >
+
+        <div class="form-grid">
+
+            <div class="field">
+
+                <label>
+                    Nama
+                </label>
+
+                <input
+                    type="text"
+                    name="name"
+                    value="{{ old('name') }}"
+                    class="input"
+                    required
+                >
+
+            </div>
+
+            <div class="field">
+
+                <label>
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    name="email"
+                    value="{{ old('email') }}"
+                    class="input"
+                    required
+                >
+
+            </div>
+
+            <div class="field">
+
+                <label>
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    name="password"
+                    class="input"
+                    required
+                >
+
+            </div>
+
+        </div>
+
+        <div style="margin-top:25px; display:flex; gap:10px;">
+
+            <button
+                type="submit"
+                class="tombol"
+            >
+                Simpan Admin
+            </button>
+
+            <a
+                href="/admin/admins"
+                class="tombol tombol-putih"
+            >
+                Kembali
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
 @endsection
