@@ -1,6 +1,13 @@
 @extends('admin.layout')
-@section('title','Kelola Admin')
-@section('heading','Kelola Admin')
+@section('title', 'Kelola Admin')
+@section('heading', 'Kelola Admin')
 @section('content')
-<div class="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center"><p class="text-sm text-slate-500">Kelola akun yang memiliki akses ke panel admin.</p><a href="{{ route('admin.admins.create') }}" class="rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white">+ Tambah Admin</a></div><div class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-sm"><thead class="bg-slate-50 text-xs uppercase text-slate-400"><tr><th class="px-5 py-4">Nama</th><th class="px-5 py-4">Email</th><th class="px-5 py-4">Role</th><th class="px-5 py-4">Status</th><th class="px-5 py-4">Aksi</th></tr></thead><tbody class="divide-y">@foreach($admins as $i=>$a)<tr><td class="px-5 py-4 font-semibold">{{ $a['name'] }}</td><td class="px-5 py-4">{{ $a['email'] }}</td><td class="px-5 py-4">{{ $a['role'] }}</td><td class="px-5 py-4"><span class="badge badge-green">{{ $a['status'] }}</span></td><td class="px-5 py-4"><a href="{{ route('admin.admins.edit',$i+1) }}" class="font-semibold text-indigo-600">Edit</a></td></tr>@endforeach</tbody></table></div></div>
+<div class="baris"><div class="deskripsi">Kelola akun yang memiliki akses ke panel admin.</div><a href="{{ route('admin.admins.create') }}" class="tombol">+ Tambah Admin</a></div>
+<div class="panel" style="margin-top:20px;"><div class="tabel-box"><table><thead><tr><th>Nama</th><th>Email</th><th>Role</th><th>Aksi</th></tr></thead><tbody>
+@forelse($admins as $admin)
+<tr><td><strong>{{ $admin->name }}</strong></td><td>{{ $admin->email }}</td><td><span class="badge badge-hitam">Admin</span></td><td><a href="{{ route('admin.admins.edit', $admin->id) }}" class="link">Edit</a></td></tr>
+@empty
+<tr><td colspan="4"><div class="kosong"><strong>Belum ada admin</strong>Tambahkan akun admin untuk mengakses panel.</div></td></tr>
+@endforelse
+</tbody></table></div></div>
 @endsection

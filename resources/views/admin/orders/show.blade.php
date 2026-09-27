@@ -1,6 +1,23 @@
 @extends('admin.layout')
-@section('title','Detail Pesanan')
-@section('heading','Detail Pesanan')
+@section('title', 'Detail Pesanan')
+@section('heading', 'Detail Pesanan')
 @section('content')
-<div class="mb-5"><a href="{{ route('admin.orders.index') }}" class="text-sm font-semibold text-indigo-600">← Kembali ke pesanan</a></div><div class="grid gap-6 lg:grid-cols-3"><div class="lg:col-span-2 space-y-6"><div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><div class="flex items-start justify-between"><div><p class="text-xs uppercase text-slate-400">Kode Pesanan</p><h2 class="mt-1 text-2xl font-bold">{{ $code }}</h2></div><span class="badge badge-yellow">Menunggu</span></div><div class="mt-6 grid gap-5 sm:grid-cols-2"><div><p class="label">Customer</p><p class="font-semibold">Budi Santoso</p></div><div><p class="label">Tanggal</p><p class="font-semibold">26 September 2026</p></div><div><p class="label">Produk</p><p class="font-semibold">Jersey Custom</p></div><div><p class="label">Jumlah</p><p class="font-semibold">5 pcs</p></div></div></div><div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><h3 class="font-bold">Status Pesanan</h3><div class="mt-5 grid gap-3 sm:grid-cols-4"><div class="rounded-xl bg-indigo-50 p-4 text-center text-sm font-semibold text-indigo-700">Pesanan</div><div class="rounded-xl bg-slate-50 p-4 text-center text-sm text-slate-500">Pembayaran</div><div class="rounded-xl bg-slate-50 p-4 text-center text-sm text-slate-500">Produksi</div><div class="rounded-xl bg-slate-50 p-4 text-center text-sm text-slate-500">Selesai</div></div></div></div><div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><h3 class="font-bold">Aksi</h3><form action="{{ route('admin.orders.action') }}" method="POST" class="mt-4 space-y-3">@csrf<select class="input"><option>Menunggu</option><option>Diproses</option><option>Selesai</option><option>Dibatalkan</option></select><button class="w-full rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white">Update Status</button></form></div></div>
+<div style="margin-bottom:15px;"><a class="link" href="{{ route('admin.orders.index') }}">← Kembali ke pesanan</a></div>
+<div class="grid-utama" style="margin-top:0;">
+    <div>
+        <div class="panel">
+            <div class="baris"><div><div style="color:#888;font-size:11px;text-transform:uppercase;">Kode Pesanan</div><h2 style="margin-top:5px;">{{ $code }}</h2></div><span class="badge badge-kuning">Menunggu</span></div>
+            <div class="deskripsi" style="margin-top:18px;">Detail customer, produk, jumlah, pembayaran, dan desain akan ditampilkan di sini setelah data pesanan terhubung.</div>
+            <div class="timeline"><div class="aktif">Pesanan</div><div>Pembayaran</div><div>Produksi</div><div>Selesai</div></div>
+        </div>
+    </div>
+    <div class="panel">
+        <h3>Update Status</h3>
+        <form action="{{ route('admin.orders.action') }}" method="POST" style="margin-top:15px;">
+            @csrf
+            <select class="input" name="status"><option>Menunggu</option><option>Diproses</option><option>Selesai</option><option>Dibatalkan</option></select>
+            <button class="tombol" style="width:100%;margin-top:10px;">Simpan Status</button>
+        </form>
+    </div>
+</div>
 @endsection

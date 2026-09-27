@@ -1,6 +1,13 @@
 @extends('admin.layout')
-@section('title','Pembayaran')
-@section('heading','Pembayaran')
+@section('title', 'Pembayaran')
+@section('heading', 'Pembayaran')
 @section('content')
-<div class="mb-6"><p class="text-sm text-slate-500">Verifikasi pembayaran dan pantau status transaksi.</p></div><div class="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left text-sm"><thead class="bg-slate-50 text-xs uppercase text-slate-400"><tr><th class="px-5 py-4">Kode</th><th class="px-5 py-4">Pesanan</th><th class="px-5 py-4">Customer</th><th class="px-5 py-4">Metode</th><th class="px-5 py-4">Jumlah</th><th class="px-5 py-4">Status</th><th class="px-5 py-4">Aksi</th></tr></thead><tbody class="divide-y">@foreach($payments as $p)<tr><td class="px-5 py-4 font-semibold">{{ $p['code'] }}</td><td class="px-5 py-4">{{ $p['order'] }}</td><td class="px-5 py-4">{{ $p['customer'] }}</td><td class="px-5 py-4 text-slate-500">{{ $p['method'] }}</td><td class="px-5 py-4 font-semibold">{{ $p['amount'] }}</td><td class="px-5 py-4"><span class="badge {{ $p['status']==='Lunas'?'badge-green':'badge-yellow' }}">{{ $p['status'] }}</span></td><td class="px-5 py-4"><form action="{{ route('admin.payments.action') }}" method="POST">@csrf<button class="font-semibold text-indigo-600">Verifikasi</button></form></td></tr>@endforeach</tbody></table></div></div>
+<div class="deskripsi">Verifikasi pembayaran dan pantau status transaksi.</div>
+<div class="panel" style="margin-top:20px;"><div class="tabel-box"><table><thead><tr><th>Kode</th><th>Pesanan</th><th>Customer</th><th>Metode</th><th>Jumlah</th><th>Status</th><th>Aksi</th></tr></thead><tbody>
+@forelse($payments as $p)
+<tr><td><strong>{{ $p['code'] }}</strong></td><td>{{ $p['order'] }}</td><td>{{ $p['customer'] }}</td><td>{{ $p['method'] }}</td><td>{{ $p['amount'] }}</td><td><span class="badge badge-abu">{{ $p['status'] }}</span></td><td><form action="{{ route('admin.payments.action') }}" method="POST">@csrf<button class="link">Verifikasi</button></form></td></tr>
+@empty
+<tr><td colspan="7"><div class="kosong"><strong>Belum ada pembayaran</strong>Data pembayaran akan tampil setelah backend transaksi terhubung.</div></td></tr>
+@endforelse
+</tbody></table></div></div>
 @endsection

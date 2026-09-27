@@ -1,7 +1,30 @@
 @extends('admin.layout')
-@section('title','Kelola Produk')
-@section('heading','Kelola Produk')
+@section('title', 'Kelola Produk')
+@section('heading', 'Kelola Produk')
 @section('content')
-<div class="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center"><div><p class="text-sm text-slate-500">Atur katalog produk yang tersedia untuk customer.</p></div><a href="{{ route('admin.products.create') }}" class="rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white hover:bg-indigo-700">+ Tambah Produk</a></div>
-<div class="rounded-2xl border border-slate-200 bg-white shadow-sm"><div class="border-b p-5"><input class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-indigo-500 sm:max-w-sm" placeholder="Cari produk..."></div><div class="overflow-x-auto"><table class="w-full text-left text-sm"><thead class="bg-slate-50 text-xs uppercase text-slate-400"><tr><th class="px-5 py-4">Produk</th><th class="px-5 py-4">Kategori</th><th class="px-5 py-4">Harga</th><th class="px-5 py-4">Stok</th><th class="px-5 py-4">Status</th><th class="px-5 py-4 text-right">Aksi</th></tr></thead><tbody class="divide-y divide-slate-100">@foreach($products as $p)<tr class="hover:bg-slate-50/70"><td class="px-5 py-4 font-semibold text-slate-900">{{ $p['name'] }}</td><td class="px-5 py-4 text-slate-500">{{ $p['category'] }}</td><td class="px-5 py-4">{{ $p['price'] }}</td><td class="px-5 py-4">{{ $p['stock'] }}</td><td class="px-5 py-4"><span class="badge {{ $p['status']==='Aktif'?'badge-green':'badge-red' }}">{{ $p['status'] }}</span></td><td class="px-5 py-4 text-right"><a href="{{ route('admin.products.edit',$p['id']) }}" class="font-semibold text-indigo-600">Edit</a></td></tr>@endforeach</tbody></table></div></div>
+<div class="baris">
+    <div><div class="deskripsi">Atur katalog produk yang tersedia untuk customer.</div></div>
+    <a href="{{ route('admin.products.create') }}" class="tombol">+ Tambah Produk</a>
+</div>
+<div class="panel" style="margin-top:20px;">
+    <div class="filter">
+        <input class="input" type="text" placeholder="Cari produk...">
+        <select class="input"><option>Semua Status</option><option>Aktif</option><option>Habis</option></select>
+    </div>
+    <div class="tabel-box">
+        <table>
+            <thead><tr><th>Produk</th><th>Kategori</th><th>Harga</th><th>Stok</th><th>Status</th><th class="kanan">Aksi</th></tr></thead>
+            <tbody>
+            @forelse($products as $p)
+                <tr>
+                    <td><strong>{{ $p['name'] }}</strong></td><td>{{ $p['category'] }}</td><td>{{ $p['price'] }}</td><td>{{ $p['stock'] }}</td><td><span class="badge {{ $p['status'] === 'Aktif' ? 'badge-hijau' : 'badge-merah' }}">{{ $p['status'] }}</span></td>
+                    <td class="kanan"><a class="link" href="{{ route('admin.products.edit', $p['id']) }}">Edit</a></td>
+                </tr>
+            @empty
+                <tr><td colspan="6"><div class="kosong"><strong>Belum ada produk</strong>Hubungkan halaman ini ke data produk setelah tabel produk backend tersedia.</div></td></tr>
+            @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
 @endsection

@@ -1,6 +1,21 @@
 @extends('admin.layout')
-@section('title','Approval Desain')
-@section('heading','Approval Desain')
+@section('title', 'Approval Desain')
+@section('heading', 'Approval Desain')
 @section('content')
-<div class="mb-6"><p class="text-sm text-slate-500">Periksa desain customer sebelum pesanan masuk proses produksi.</p></div><div class="grid gap-5 lg:grid-cols-2">@foreach($designs as $d)<div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"><div class="flex items-start justify-between"><div><p class="text-xs font-semibold text-indigo-600">{{ $d['code'] }} · {{ $d['order'] }}</p><h3 class="mt-1 font-bold">{{ $d['customer'] }}</h3></div><span class="badge {{ ['Menunggu'=>'badge-yellow','Disetujui'=>'badge-green','Ditolak'=>'badge-red'][$d['status']] }}">{{ $d['status'] }}</span></div><div class="mt-5 flex min-h-36 items-center justify-center rounded-xl bg-slate-100 text-4xl text-slate-300">▧</div><p class="mt-3 text-sm text-slate-500">File: <span class="font-medium text-slate-700">{{ $d['file'] }}</span></p><form action="{{ route('admin.designs.action') }}" method="POST" class="mt-4 grid grid-cols-2 gap-3">@csrf<button class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-600">Tolak</button><button class="rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white">Setujui</button></form></div>@endforeach</div>
+<div class="deskripsi">Periksa desain customer sebelum pesanan masuk proses produksi.</div>
+<div class="kartu-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));">
+@forelse($designs as $d)
+    <div class="panel">
+        <div class="baris"><div><strong>{{ $d['code'] }}</strong><div class="deskripsi">{{ $d['customer'] }}</div></div><span class="badge badge-kuning">{{ $d['status'] }}</span></div>
+        <div style="margin-top:15px;min-height:170px;display:grid;place-items:center;background:#f1f1f1;border-radius:7px;color:#aaa;">▧</div>
+        <div class="deskripsi">File: {{ $d['file'] }}</div>
+        <form action="{{ route('admin.designs.action') }}" method="POST" class="aksi" style="margin-top:13px;">
+            @csrf
+            <button type="submit" class="tombol tombol-merah">Tolak</button><button type="submit" class="tombol">Setujui</button>
+        </form>
+    </div>
+@empty
+    <div class="panel" style="grid-column:1/-1;"><div class="kosong"><strong>Belum ada desain untuk direview</strong>Data desain customer akan tampil di sini.</div></div>
+@endforelse
+</div>
 @endsection

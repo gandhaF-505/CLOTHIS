@@ -1,6 +1,12 @@
 @extends('admin.layout')
-@section('title','Edit Admin')
-@section('heading','Edit Admin')
+@section('title', 'Edit Admin')
+@section('heading', 'Edit Admin')
 @section('content')
-<div class="max-w-2xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"><span class="text-xs font-semibold uppercase text-indigo-600">Admin #{{ $adminId }}</span><h2 class="mt-1 text-xl font-bold">Edit Akun Admin</h2><form action="{{ route('admin.admins.action') }}" method="POST" class="mt-6 space-y-5">@csrf<div><label class="label">Nama</label><input class="input" value="Admin Operasional"></div><div><label class="label">Email</label><input type="email" class="input" value="operasional@clothis.test"></div><div><label class="label">Role</label><select class="input"><option selected>Admin</option><option>Super Admin</option></select></div><div><label class="label">Status</label><select class="input"><option selected>Aktif</option><option>Nonaktif</option></select></div><div class="flex justify-end gap-3"><a href="{{ route('admin.admins.index') }}" class="rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold">Batal</a><button class="rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white">Simpan Perubahan</button></div></form></div>
+<div class="panel" style="max-width:700px;"><h2>Edit Akun Admin</h2><p class="deskripsi" style="margin-bottom:22px;">Admin #{{ $adminId }}</p><form action="{{ route('admin.admins.action') }}" method="POST" class="form-grid">@csrf
+<div class="field field-full"><label>Nama</label><input class="input" name="name"></div>
+<div class="field field-full"><label>Email</label><input class="input" type="email" name="email"></div>
+<div class="field"><label>Password Baru</label><input class="input" type="password" name="password" placeholder="Kosongkan jika tidak diubah"></div>
+<div class="field"><label>Role</label><select class="input" name="role"><option value="admin">Admin</option></select></div>
+<div class="field-full" style="display:flex;justify-content:flex-end;gap:8px;"><a href="{{ route('admin.admins.index') }}" class="tombol tombol-putih">Batal</a><button class="tombol">Simpan Perubahan</button></div>
+</form></div>
 @endsection

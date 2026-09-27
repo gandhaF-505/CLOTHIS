@@ -1,6 +1,16 @@
 @extends('admin.layout')
-@section('title','Kelola Pesanan')
-@section('heading','Kelola Pesanan')
+@section('title', 'Kelola Pesanan')
+@section('heading', 'Kelola Pesanan')
 @section('content')
-<div class="mb-6"><p class="text-sm text-slate-500">Pantau pesanan customer dan progres pengerjaan.</p></div><div class="rounded-2xl border border-slate-200 bg-white shadow-sm"><div class="flex flex-col gap-3 border-b p-5 sm:flex-row"><input class="input sm:max-w-xs" placeholder="Cari kode/customer..."><select class="input sm:max-w-xs"><option>Semua Status</option><option>Menunggu</option><option>Diproses</option><option>Selesai</option></select></div><div class="overflow-x-auto"><table class="w-full text-left text-sm"><thead class="bg-slate-50 text-xs uppercase text-slate-400"><tr><th class="px-5 py-4">Kode</th><th class="px-5 py-4">Customer</th><th class="px-5 py-4">Produk</th><th class="px-5 py-4">Total</th><th class="px-5 py-4">Status</th><th class="px-5 py-4">Aksi</th></tr></thead><tbody class="divide-y">@foreach($orders as $o)<tr><td class="px-5 py-4 font-semibold">{{ $o['code'] }}</td><td class="px-5 py-4">{{ $o['customer'] }}</td><td class="px-5 py-4 text-slate-500">{{ $o['product'] }}</td><td class="px-5 py-4">{{ $o['total'] }}</td><td class="px-5 py-4"><span class="badge {{ ['Menunggu'=>'badge-yellow','Diproses'=>'badge-blue','Selesai'=>'badge-green','Dibatalkan'=>'badge-red'][$o['status']] }}">{{ $o['status'] }}</span></td><td class="px-5 py-4"><a class="font-semibold text-indigo-600" href="{{ route('admin.orders.show',$o['code']) }}">Detail</a></td></tr>@endforeach</tbody></table></div></div>
+<div class="deskripsi">Pantau pesanan customer dan progres pengerjaan.</div>
+<div class="panel" style="margin-top:20px;">
+    <div class="filter"><input class="input" type="text" placeholder="Cari kode/customer..."><select class="input"><option>Semua Status</option><option>Menunggu</option><option>Diproses</option><option>Selesai</option><option>Dibatalkan</option></select></div>
+    <div class="tabel-box"><table><thead><tr><th>Kode</th><th>Customer</th><th>Produk</th><th>Total</th><th>Status</th><th>Aksi</th></tr></thead><tbody>
+    @forelse($orders as $o)
+        <tr><td><strong>{{ $o['code'] }}</strong></td><td>{{ $o['customer'] }}</td><td>{{ $o['product'] }}</td><td>{{ $o['total'] }}</td><td><span class="badge badge-abu">{{ $o['status'] }}</span></td><td><a class="link" href="{{ route('admin.orders.show', $o['code']) }}">Detail</a></td></tr>
+    @empty
+        <tr><td colspan="6"><div class="kosong"><strong>Belum ada pesanan</strong>Data pesanan akan tampil setelah backend pesanan terhubung.</div></td></tr>
+    @endforelse
+    </tbody></table></div>
+</div>
 @endsection

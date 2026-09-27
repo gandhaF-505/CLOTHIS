@@ -1,6 +1,19 @@
 @extends('admin.layout')
-@section('title','Tambah Produk')
-@section('heading','Tambah Produk')
+@section('title', 'Tambah Produk')
+@section('heading', 'Tambah Produk')
 @section('content')
-<div class="max-w-3xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"><div class="mb-6"><h2 class="text-xl font-bold">Informasi Produk</h2><p class="mt-1 text-sm text-slate-500">Form tampilan siap dihubungkan ke controller CRUD.</p></div><form action="{{ route('admin.products.action') }}" method="POST" class="grid gap-5 sm:grid-cols-2">@csrf<div class="sm:col-span-2"><label class="label">Nama Produk</label><input class="input" placeholder="Contoh: Kaos Cotton Combed 24s"></div><div><label class="label">Kategori</label><select class="input"><option>Kaos</option><option>Jersey</option><option>Hoodie</option></select></div><div><label class="label">Harga</label><input class="input" placeholder="Rp85.000"></div><div><label class="label">Stok</label><input type="number" class="input" placeholder="0"></div><div><label class="label">Status</label><select class="input"><option>Aktif</option><option>Habis</option></select></div><div class="sm:col-span-2"><label class="label">Deskripsi</label><textarea rows="5" class="input" placeholder="Deskripsi produk..."></textarea></div><div class="sm:col-span-2 flex justify-end gap-3"><a href="{{ route('admin.products.index') }}" class="rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold">Batal</a><button class="rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white">Simpan Produk</button></div></form></div>
+<div class="panel" style="max-width:850px;">
+    <h2>Informasi Produk</h2>
+    <p class="deskripsi" style="margin-bottom:22px;">Isi data produk yang akan ditampilkan pada katalog.</p>
+    <form action="{{ route('admin.products.action') }}" method="POST" class="form-grid">
+        @csrf
+        <div class="field field-full"><label>Nama Produk</label><input class="input" name="name" placeholder="Contoh: Kaos Cotton Combed 24s"></div>
+        <div class="field"><label>Kategori</label><input class="input" name="category" placeholder="Kaos / Jersey / Hoodie"></div>
+        <div class="field"><label>Harga</label><input class="input" type="number" name="price" placeholder="85000"></div>
+        <div class="field"><label>Stok</label><input class="input" type="number" name="stock" min="0" placeholder="0"></div>
+        <div class="field"><label>Status</label><select class="input" name="status"><option>Aktif</option><option>Habis</option></select></div>
+        <div class="field field-full"><label>Deskripsi</label><textarea class="input" name="description" rows="5" placeholder="Deskripsi produk..."></textarea></div>
+        <div class="field-full" style="display:flex;justify-content:flex-end;gap:8px;"><a href="{{ route('admin.products.index') }}" class="tombol tombol-putih">Batal</a><button class="tombol" type="submit">Simpan Produk</button></div>
+    </form>
+</div>
 @endsection
