@@ -1,0 +1,6 @@
+@extends('admin.layout')
+@section('title','Edit Admin')
+@section('heading','Edit Admin')
+@section('content')
+<div class="max-w-2xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"><span class="text-xs font-semibold uppercase text-indigo-600">Admin #{{ $adminId }}</span><h2 class="mt-1 text-xl font-bold">Edit Akun Admin</h2><form action="{{ route('admin.admins.action') }}" method="POST" class="mt-6 space-y-5">@csrf<div><label class="label">Nama</label><input class="input" value="Admin Operasional"></div><div><label class="label">Email</label><input type="email" class="input" value="operasional@clothis.test"></div><div><label class="label">Role</label><select class="input"><option selected>Admin</option><option>Super Admin</option></select></div><div><label class="label">Status</label><select class="input"><option selected>Aktif</option><option>Nonaktif</option></select></div><div class="flex justify-end gap-3"><a href="{{ route('admin.admins.index') }}" class="rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold">Batal</a><button class="rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white">Simpan Perubahan</button></div></form></div>
+@endsection

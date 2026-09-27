@@ -7,3 +7,13 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+@layer components {
+    .input { @apply w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10; }
+    .label { @apply mb-2 block text-xs font-semibold uppercase tracking-wide text-slate-500; }
+    .badge { @apply inline-flex rounded-full px-2.5 py-1 text-xs font-semibold; }
+    .badge-green { @apply bg-emerald-50 text-emerald-700; }
+    .badge-yellow { @apply bg-amber-50 text-amber-700; }
+    .badge-blue { @apply bg-blue-50 text-blue-700; }
+    .badge-red { @apply bg-red-50 text-red-700; }
+}
