@@ -26,21 +26,23 @@ class PaymentController extends Controller
     {
         $validated = $request->validate([
             'order_id' => ['required', 'exists:orders,id'],
-            'method' => ['required', 'string', 'max:100'],
+            'method' => ['required', 'string'],
             'amount' => ['required', 'numeric', 'min:0'],
-            'status' => ['required', 'string', 'max:100'],
+            'status' => ['required', 'string'],
             'proof' => ['nullable', 'string'],
         ]);
 
         Payment::create($validated);
 
-        return redirect()->route('admin.payments.index')
+        return redirect()
+            ->route('admin.payments.index')
             ->with('success', 'Pembayaran berhasil ditambahkan.');
     }
 
     public function show(string $payment)
     {
-        $payment = Payment::with('order.product')->findOrFail($payment);
+        $payment = Payment::with('order.product')
+            ->findOrFail($payment);
 
         return view('admin.payments.show', compact('payment'));
     }
@@ -57,28 +59,17 @@ class PaymentController extends Controller
         $payment = Payment::findOrFail($payment);
 
         $validated = $request->validate([
-            'method' => ['required', 'string', 'max:100'],
+            'method' => ['required', 'string'],
             'amount' => ['required', 'numeric', 'min:0'],
-            'status' => ['required', 'string', 'max:100'],
+            'status' => ['required', 'string'],
             'proof' => ['nullable', 'string'],
         ]);
 
         $payment->update($validated);
 
-        return redirect()->route('admin.payments.index')
+        return redirect()
+            ->route('admin.payments.index')
             ->with('success', 'Pembayaran berhasil diperbarui.');
-    }
-
-    public function action(Request $request)
-    {
-        $payment = Payment::findOrFail($request->payment_id);
-
-        $payment->update([
-            'status' => 'Berhasil',
-        ]);
-
-        return redirect()->route('admin.payments.index')
-            ->with('success', 'Pembayaran berhasil diverifikasi.');
     }
 
     public function destroy(string $payment)
@@ -87,7 +78,31 @@ class PaymentController extends Controller
 
         $payment->delete();
 
-        return redirect()->route('admin.payments.index')
+        return redirect()
+            ->route('admin.payments.index')
             ->with('success', 'Pembayaran berhasil dihapus.');
+    }
+
+    public function action(Request $request)
+    {
+        $payment = Payment::with('order')
+            ->findOrFail($request->payment_id);
+
+        if ($request->action === 'berhasil') {
+            $payment->update([
+                'status' => 'Berhasil',
+            ]);
+
+            $payment->order->update([
+                'status' => 'Pembayaran Berhasil',
+            ]);
+
+            return back()->with(
+                'success',
+                'Pembayaran berhasil diverifikasi.'
+            );
+        }
+
+        return back();
     }
 }

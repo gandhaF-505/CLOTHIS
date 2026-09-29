@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Payment;
-use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -15,6 +13,7 @@ class Order extends Model
         'model',
         'quantity',
         'design',
+        'design_status',
         'notes',
         'status',
     ];

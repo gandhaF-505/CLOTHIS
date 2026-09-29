@@ -15,7 +15,14 @@ use App\Http\Controllers\Admin\PaymentController;
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 
 Route::resource('products', ProductController::class);
+
 Route::resource('orders', OrderController::class);
+
+Route::get('/orders/{order}/payment', [OrderController::class, 'payment'])
+    ->name('orders.payment');
+
+Route::post('/orders/{order}/payment', [OrderController::class, 'paymentStore'])
+    ->name('orders.payment.store');
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
@@ -39,8 +46,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/orders/{code}', [AdminPageController::class, 'orderDetail'])
         ->name('orders.show');
 
+    Route::post('/orders/action', [AdminPageController::class, 'orderAction'])
+        ->name('orders.action');
+
     Route::get('/designs', [AdminPageController::class, 'designs'])
         ->name('designs.index');
+
+    Route::post('/designs/action', [AdminPageController::class, 'designAction'])
+        ->name('designs.action');
 
     Route::resource('payments', PaymentController::class);
 

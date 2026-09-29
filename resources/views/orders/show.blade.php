@@ -1,287 +1,399 @@
 @extends('layouts.app')
 
-@section('title', 'Detail Pesanan - CLOTHIS')
-
 @section('content')
 
 <style>
-    .detail-page {
-        padding: 80px 0;
-        background: #f8f8f6;
-        min-height: 80vh;
+    .detail-pesanan {
+        padding: 40px 0;
     }
 
-    .kembali {
-        display: inline-block;
-        margin-bottom: 30px;
-        color: #111;
-        text-decoration: none;
-        font-weight: 500;
-    }
-
-    .kembali:hover {
-        text-decoration: underline;
-    }
-
-    .detail-box {
+    .kartu-detail {
         background: white;
-        border-radius: 18px;
-        padding: 30px;
+        border: 1px solid #eee;
+        border-radius: 12px;
+        padding: 25px;
     }
 
-    .foto img {
-        width: 100%;
-        height: 500px;
+    .produk-detail {
+        display: flex;
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+
+    .produk-detail img {
+        width: 180px;
+        height: 180px;
         object-fit: cover;
-        border-radius: 14px;
-    }
-
-    .isi {
-        padding: 10px 10px 10px 20px;
-    }
-
-    .isi small {
-        color: #777;
-        letter-spacing: 2px;
-    }
-
-    .isi h1 {
-        font-size: 40px;
-        margin: 10px 0;
-        font-weight: 700;
-    }
-
-    .harga {
-        font-size: 24px;
-        font-weight: 600;
-        margin-bottom: 25px;
-    }
-
-    .status-box {
-        padding: 15px 18px;
         border-radius: 10px;
-        margin-bottom: 25px;
     }
 
-    .status-box small {
+    .produk-detail h1 {
+        font-size: 26px;
+        margin-bottom: 10px;
+    }
+
+    .produk-detail p {
+        color: #666;
+    }
+
+    .info-pesanan {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 25px;
+    }
+
+    .info {
+        background: #f7f7f7;
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    .info span {
         display: block;
-        letter-spacing: 0;
+        color: #777;
+        font-size: 13px;
         margin-bottom: 5px;
     }
 
-    .status-box strong {
-        font-size: 16px;
+    .status-pesanan {
+        margin-top: 25px;
+        padding: 20px;
+        border-radius: 10px;
+        background: #f7f7f7;
     }
 
-    .menunggu {
+    .status-pesanan strong {
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .status-pesanan p {
+        margin-bottom: 5px;
+    }
+
+    .status {
+        display: inline-block;
+        padding: 7px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        background: #eee;
+    }
+
+    .status-menunggu {
         background: #fff3cd;
         color: #856404;
     }
 
-    .disetujui {
+    .status-disetujui {
+        background: #cff4fc;
+        color: #055160;
+    }
+
+    .status-berhasil {
         background: #d1e7dd;
         color: #0f5132;
     }
 
-    .ditolak {
-        background: #f8d7da;
-        color: #842029;
+    .status-produksi {
+        background: #e2d9f3;
+        color: #432874;
     }
 
-    .data {
-        border-top: 1px solid #eee;
+    .status-selesai {
+        background: #d1e7dd;
+        color: #0f5132;
+    }
+
+    .btn-bayar {
+        display: inline-block;
+        margin-top: 15px;
+        background: #198754;
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+    }
+
+    .btn-bayar:hover {
+        background: #157347;
+        color: white;
+    }
+
+    .btn-kembali {
+        display: inline-block;
         margin-top: 20px;
-        padding-top: 20px;
+        background: #111;
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 8px;
     }
 
-    .baris {
-        display: flex;
-        justify-content: space-between;
-        gap: 20px;
-        padding: 12px 0;
-        border-bottom: 1px solid #eee;
+    .btn-kembali:hover {
+        background: #333;
+        color: white;
     }
 
-    .baris span:first-child {
-        color: #777;
-    }
-
-    .catatan {
-        margin-top: 25px;
-    }
-
-    .catatan h5 {
-        margin-bottom: 10px;
+    .pesan-sukses {
+        background: #d1e7dd;
+        color: #0f5132;
+        padding: 12px 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
     }
 
     .desain {
+        margin-top: 25px;
+        background: #f7f7f7;
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    .desain a {
         display: inline-block;
         margin-top: 8px;
         color: #111;
         font-weight: 600;
     }
 
-    .tidak-ada {
-        color: #999;
-    }
+    @media (max-width: 768px) {
 
-    .hapus {
-        margin-top: 30px;
-    }
-
-    @media (max-width: 991px) {
-        .foto img {
-            height: 400px;
+        .produk-detail {
+            flex-direction: column;
         }
 
-        .isi {
-            padding: 25px 0 0;
-        }
-    }
-
-    @media (max-width: 576px) {
-        .foto img {
-            height: 300px;
+        .produk-detail img {
+            width: 100%;
+            height: 250px;
         }
 
-        .isi h1 {
-            font-size: 30px;
+        .info-pesanan {
+            grid-template-columns: 1fr;
         }
     }
 </style>
 
-<section class="detail-page">
-    <div class="container">
+<div class="container detail-pesanan">
 
-        <a href="{{ route('orders.index') }}" class="kembali">
-            ← Kembali ke Pesanan
-        </a>
+    @if(session('success'))
+        <div class="pesan-sukses">
+            {{ session('success') }}
+        </div>
+    @endif
 
-        <div class="detail-box">
-            <div class="row g-4">
+    <div class="kartu-detail">
 
-                <div class="col-lg-6">
-                    <div class="foto">
-                        <img
-                            src="{{ asset('images/' . $order->product->image) }}"
-                            alt="{{ $order->product->name }}"
-                        >
-                    </div>
-                </div>
+        <div class="produk-detail">
 
-                <div class="col-lg-6">
-                    <div class="isi">
+            @if($order->product->image)
 
-                        <small>CUSTOM PRODUCT</small>
+                <img
+                    src="{{ asset('storage/' . $order->product->image) }}"
+                    alt="{{ $order->product->name }}"
+                >
 
-                        <h1>{{ $order->product->name }}</h1>
+            @endif
 
-                        <div class="harga">
-                            Rp. {{ number_format($order->product->price, 0, ',', '.') }}
-                        </div>
+            <div>
 
-                        @if ($order->status == 'Menunggu Konfirmasi')
-                            <div class="status-box menunggu">
-                                <small>Status Pesanan</small>
-                                <strong>Menunggu Konfirmasi</strong>
-                            </div>
-                        @elseif ($order->status == 'Disetujui')
-                            <div class="status-box disetujui">
-                                <small>Status Pesanan</small>
-                                <strong>Disetujui</strong>
-                            </div>
-                        @elseif ($order->status == 'Ditolak')
-                            <div class="status-box ditolak">
-                                <small>Status Pesanan</small>
-                                <strong>Ditolak</strong>
-                            </div>
-                        @else
-                            <div class="status-box menunggu">
-                                <small>Status Pesanan</small>
-                                <strong>{{ $order->status }}</strong>
-                            </div>
-                        @endif
+                <h1>
+                    {{ $order->product->name }}
+                </h1>
 
-                        <div class="data">
+                <p>
+                    {{ $order->product->description }}
+                </p>
 
-                            <div class="baris">
-                                <span>Warna</span>
-                                <strong>{{ $order->color }}</strong>
-                            </div>
-
-                            <div class="baris">
-                                <span>Ukuran</span>
-                                <strong>{{ $order->size }}</strong>
-                            </div>
-
-                            <div class="baris">
-                                <span>Model</span>
-                                <strong>{{ $order->model }}</strong>
-                            </div>
-
-                            <div class="baris">
-                                <span>Jumlah</span>
-                                <strong>{{ $order->quantity }}</strong>
-                            </div>
-
-                            <div class="baris">
-                                <span>Tanggal Pesan</span>
-                                <strong>{{ $order->created_at->format('d M Y') }}</strong>
-                            </div>
-
-                        </div>
-
-                        <div class="catatan">
-                            <h5>Desain</h5>
-
-                            @if ($order->design)
-                                <a
-                                    href="{{ asset('storage/' . $order->design) }}"
-                                    target="_blank"
-                                    class="desain"
-                                >
-                                    Lihat File Desain →
-                                </a>
-                            @else
-                                <span class="tidak-ada">
-                                    Tidak ada file desain.
-                                </span>
-                            @endif
-                        </div>
-
-                        <div class="catatan">
-                            <h5>Catatan</h5>
-
-                            @if ($order->notes)
-                                <p>{{ $order->notes }}</p>
-                            @else
-                                <span class="tidak-ada">
-                                    Tidak ada catatan.
-                                </span>
-                            @endif
-                        </div>
-
-                        <form
-                            action="{{ route('orders.destroy', $order) }}"
-                            method="POST"
-                            class="hapus"
-                            onsubmit="return confirm('Yakin ingin menghapus pesanan ini?')"
-                        >
-                            @csrf
-                            @method('DELETE')
-
-                            <button type="submit" class="btn btn-outline-danger">
-                                Hapus Pesanan
-                            </button>
-                        </form>
-
-                    </div>
-                </div>
+                <strong>
+                    Rp{{ number_format($order->product->price, 0, ',', '.') }}
+                </strong>
 
             </div>
+
         </div>
 
+        <h3>Detail Pesanan</h3>
+
+        <div class="info-pesanan">
+
+            <div class="info">
+
+                <span>Warna</span>
+
+                {{ $order->color }}
+
+            </div>
+
+            <div class="info">
+
+                <span>Ukuran</span>
+
+                {{ $order->size }}
+
+            </div>
+
+            <div class="info">
+
+                <span>Model</span>
+
+                {{ $order->model }}
+
+            </div>
+
+            <div class="info">
+
+                <span>Jumlah</span>
+
+                {{ $order->quantity }}
+
+            </div>
+
+            <div class="info">
+
+                <span>Status Desain</span>
+
+                {{ $order->design_status }}
+
+            </div>
+
+            <div class="info">
+
+                <span>Status Pesanan</span>
+
+                {{ $order->status }}
+
+            </div>
+
+        </div>
+
+        @if($order->design)
+
+            <div class="desain">
+
+                <strong>Desain</strong>
+
+                <br>
+
+                <a
+                    href="{{ asset('storage/' . $order->design) }}"
+                    target="_blank"
+                >
+                    Lihat Desain
+                </a>
+
+            </div>
+
+        @endif
+
+        @if($order->notes)
+
+            <div class="desain">
+
+                <strong>Catatan</strong>
+
+                <p>
+                    {{ $order->notes }}
+                </p>
+
+            </div>
+
+        @endif
+
+        <div class="status-pesanan">
+
+            <strong>Status Pesanan</strong>
+
+            @if($order->status === 'Menunggu Konfirmasi')
+
+                <span class="status status-menunggu">
+                    Menunggu Konfirmasi
+                </span>
+
+                <p>
+                    Pesanan kamu sedang menunggu persetujuan admin.
+                </p>
+
+            @elseif($order->status === 'Pesanan Disetujui')
+
+                <span class="status status-disetujui">
+                    Pesanan Disetujui
+                </span>
+
+                <p>
+                    Pesanan telah disetujui. Silakan lakukan pembayaran.
+                </p>
+
+                <a
+                    href="{{ route('orders.payment', $order->id) }}"
+                    class="btn-bayar"
+                >
+                    Bayar Sekarang
+                </a>
+
+            @elseif($order->status === 'Menunggu Konfirmasi Pembayaran')
+
+                <span class="status status-menunggu">
+                    Menunggu Konfirmasi Pembayaran
+                </span>
+
+                <p>
+                    Bukti pembayaran sudah dikirim dan sedang diperiksa oleh admin.
+                </p>
+
+            @elseif($order->status === 'Pembayaran Berhasil')
+
+                <span class="status status-berhasil">
+                    Pembayaran Berhasil
+                </span>
+
+                <p>
+                    Pembayaran kamu sudah dikonfirmasi oleh admin.
+                </p>
+
+                <p>
+                    Pesanan akan dilanjutkan ke proses produksi.
+                </p>
+
+            @elseif($order->status === 'Dalam Produksi')
+
+                <span class="status status-produksi">
+                    Dalam Produksi
+                </span>
+
+                <p>
+                    Pesanan kamu sedang dalam proses produksi.
+                </p>
+
+            @elseif($order->status === 'Selesai')
+
+                <span class="status status-selesai">
+                    Selesai
+                </span>
+
+                <p>
+                    Pesanan kamu sudah selesai diproduksi.
+                </p>
+
+            @else
+
+                <span class="status">
+                    {{ $order->status }}
+                </span>
+
+            @endif
+
+        </div>
+
+        <a
+            href="{{ route('orders.index') }}"
+            class="btn-kembali"
+        >
+            Kembali ke Pesanan
+        </a>
+
     </div>
-</section>
+
+</div>
 
 @endsection

@@ -3,69 +3,107 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AdminPageController extends Controller
 {
-    public function dashboard()
+    public function orders(Request $request)
     {
-        return view('admin.dashboard', [
-            'stats' => [
-                ['label' => 'Total Produk', 'value' => 0, 'icon' => 'box'],
-                ['label' => 'Pesanan Baru', 'value' => 0, 'icon' => 'shopping'],
-                ['label' => 'Menunggu Approval', 'value' => 0, 'icon' => 'image'],
-                ['label' => 'Pembayaran Pending', 'value' => 0, 'icon' => 'card'],
-            ],
-            'orders' => [],
-        ]);
-    }
+        $query = Order::with('product')->latest();
 
-    public function products()
-    {
-        return view('admin.products.index', [
-            'products' => []
-        ]);
-    }
+        if ($request->status === 'persetujuan') {
+            $query->where('design_status', 'Menunggu Approval');
+        }
 
-    public function createProduct()
-    {
-        return view('admin.products.create');
-    }
+        if ($request->status === 'disetujui') {
+            $query->where('status', 'Pesanan Disetujui');
+        }
 
-    public function editProduct(int $id)
-    {
-        return view('admin.products.edit', [
-            'productId' => $id
-        ]);
-    }
+        if ($request->status === 'produksi') {
+            $query->where('status', 'Dalam Produksi');
+        }
 
-    public function orders()
-    {
-        return view('admin.orders.index', [
-            'orders' => []
-        ]);
+        if ($request->status === 'selesai') {
+            $query->where('status', 'Selesai');
+        }
+
+        if ($request->status === 'riwayat') {
+            $query->where('status', 'Selesai');
+        }
+
+        $orders = $query->get();
+
+        return view('admin.orders.index', compact('orders'));
     }
 
     public function orderDetail(string $code)
     {
-        return view('admin.orders.show', [
-            'code' => $code
-        ]);
+        $order = Order::with(['product', 'payment'])
+            ->findOrFail($code);
+
+        return view('admin.orders.show', compact('order'));
+    }
+
+    public function designAction(Request $request)
+    {
+        $order = Order::findOrFail($request->order_id);
+
+        if ($request->action === 'approve') {
+            $order->update([
+                'design_status' => 'Disetujui',
+                'status' => 'Pesanan Disetujui',
+            ]);
+
+            return back()->with(
+                'success',
+                'Pesanan berhasil disetujui dan menunggu pembayaran.'
+            );
+        }
+
+        if ($request->action === 'reject') {
+            $order->update([
+                'design_status' => 'Ditolak',
+            ]);
+
+            return back()->with(
+                'success',
+                'Desain berhasil ditolak.'
+            );
+        }
+
+        return back();
+    }
+
+    public function orderAction(Request $request)
+    {
+        $order = Order::findOrFail($request->order_id);
+
+        if ($request->action === 'selesai') {
+            $order->update([
+                'status' => 'Selesai',
+            ]);
+
+            return back()->with(
+                'success',
+                'Pesanan berhasil diselesaikan.'
+            );
+        }
+
+        return back();
     }
 
     public function designs()
     {
-        return view('admin.designs.index', [
-            'designs' => []
-        ]);
-    }
+        $designs = Order::with('product')
+            ->whereNotNull('design')
+            ->where('design_status', 'Menunggu Approval')
+            ->latest()
+            ->get();
 
-    public function payments()
-    {
-        return view('admin.payments.index', [
-            'payments' => []
-        ]);
+        return view('admin.designs.index', compact('designs'));
     }
 
     public function admins()
@@ -92,69 +130,23 @@ class AdminPageController extends Controller
 
     public function adminAction(Request $request)
     {
-        $action = $request->input('action');
+        $admin = User::where('role', 'admin')
+            ->findOrFail($request->id);
 
-        if ($action === 'create') {
+        if ($request->action === 'hapus') {
+            $admin->delete();
 
-            $validated = $request->validate([
-                'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-                'password' => ['required', 'string', 'min:6'],
-            ]);
-
-            User::create([
-                'name' => $validated['name'],
-                'email' => $validated['email'],
-                'password' => $validated['password'],
-                'role' => 'admin',
-            ]);
-
-            return redirect()
-                ->route('admin.admins.index')
-                ->with('success', 'Admin berhasil ditambahkan.');
+            return back()->with(
+                'success',
+                'Admin berhasil dihapus.'
+            );
         }
 
-        if ($action === 'edit') {
-
-            $admin = User::where('role', 'admin')
-                ->findOrFail($request->admin_id);
-
-            $validated = $request->validate([
-                'name' => ['required', 'string', 'max:255'],
-                'email' => [
-                    'required',
-                    'email',
-                    'max:255',
-                    'unique:users,email,' . $admin->id,
-                ],
-                'password' => ['nullable', 'string', 'min:6'],
-            ]);
-
-            $admin->name = $validated['name'];
-            $admin->email = $validated['email'];
-
-            if (!empty($validated['password'])) {
-                $admin->password = $validated['password'];
-            }
-
-            $admin->save();
-
-            return redirect()
-                ->route('admin.admins.index')
-                ->with('success', 'Admin berhasil diperbarui.');
-        }
-
-        return back()->with(
-            'success',
-            'Perubahan admin berhasil diproses.'
-        );
+        return back();
     }
 
     public function placeholder(Request $request)
     {
-        return back()->with(
-            'success',
-            'Perubahan berhasil diproses.'
-        );
+        return back();
     }
 }

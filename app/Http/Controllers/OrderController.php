@@ -37,36 +37,43 @@ class OrderController extends Controller
         ]);
 
         if ($request->hasFile('design')) {
-            $validated['design'] = $request
-                ->file('design')
+            $validated['design'] = $request->file('design')
                 ->store('designs', 'public');
         }
 
         $validated['status'] = 'Menunggu Konfirmasi';
+        $validated['design_status'] = 'Menunggu Approval';
 
         Order::create($validated);
 
         return redirect()
             ->route('orders.index')
-            ->with('success', 'Pesanan berhasil dibuat.');
+            ->with(
+                'success',
+                'Pesanan berhasil dibuat dan menunggu persetujuan admin.'
+            );
     }
 
-    public function show(Order $order)
+    public function show(string $order)
     {
-        $order->load('product');
+        $order = Order::with(['product', 'payment'])
+            ->findOrFail($order);
 
         return view('orders.show', compact('order'));
     }
 
-    public function edit(Order $order)
+    public function edit(string $order)
     {
+        $order = Order::findOrFail($order);
         $products = Product::latest()->get();
 
         return view('orders.edit', compact('order', 'products'));
     }
 
-    public function update(Request $request, Order $order)
+    public function update(Request $request, string $order)
     {
+        $order = Order::findOrFail($order);
+
         $validated = $request->validate([
             'product_id' => ['required', 'exists:products,id'],
             'color' => ['required', 'string'],
@@ -78,9 +85,10 @@ class OrderController extends Controller
         ]);
 
         if ($request->hasFile('design')) {
-            $validated['design'] = $request
-                ->file('design')
+            $validated['design'] = $request->file('design')
                 ->store('designs', 'public');
+
+            $validated['design_status'] = 'Menunggu Approval';
         }
 
         $order->update($validated);
@@ -90,12 +98,59 @@ class OrderController extends Controller
             ->with('success', 'Pesanan berhasil diperbarui.');
     }
 
-    public function destroy(Order $order)
+    public function destroy(string $order)
     {
+        $order = Order::findOrFail($order);
+
         $order->delete();
 
         return redirect()
             ->route('orders.index')
             ->with('success', 'Pesanan berhasil dihapus.');
+    }
+
+    public function payment(string $order)
+    {
+        $order = Order::with('product')
+            ->findOrFail($order);
+
+        return view('orders.payment', compact('order'));
+    }
+
+    public function paymentStore(Request $request, string $order)
+    {
+        $order = Order::with('product')
+            ->findOrFail($order);
+
+        $validated = $request->validate([
+            'method' => ['required', 'string'],
+            'proof' => ['required', 'file', 'mimes:jpg,jpeg,png,pdf', 'max:2048'],
+        ]);
+
+        $proof = $request->file('proof')
+            ->store('payments', 'public');
+
+        $amount = $order->product->price * $order->quantity;
+
+        $order->payment()->updateOrCreate(
+            ['order_id' => $order->id],
+            [
+                'method' => $validated['method'],
+                'amount' => $amount,
+                'status' => 'Menunggu Verifikasi',
+                'proof' => $proof,
+            ]
+        );
+
+        $order->update([
+            'status' => 'Menunggu Konfirmasi Pembayaran',
+        ]);
+
+        return redirect()
+            ->route('orders.show', $order->id)
+            ->with(
+                'success',
+                'Pembayaran berhasil dikirim dan sedang menunggu konfirmasi admin.'
+            );
     }
 }

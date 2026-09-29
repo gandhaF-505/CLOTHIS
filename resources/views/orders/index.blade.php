@@ -1,221 +1,221 @@
 @extends('layouts.app')
 
-@section('title', 'Pesanan - CLOTHIS')
-
 @section('content')
 
 <style>
-    .pesanan-page {
-        padding: 80px 0;
-        background: #f8f8f6;
-        min-height: 80vh;
+    .halaman-pesanan {
+        padding: 40px 0;
     }
 
-    .judul {
-        margin-bottom: 40px;
+    .judul-pesanan {
+        margin-bottom: 25px;
     }
 
-    .judul small {
-        letter-spacing: 2px;
-        color: #777;
-    }
-
-    .judul h1 {
-        font-size: 48px;
+    .judul-pesanan h1 {
+        font-size: 28px;
         font-weight: 700;
-        margin: 8px 0;
-    }
-
-    .judul p {
-        color: #777;
-    }
-
-    .pesanan-box {
-        background: white;
-        border-radius: 16px;
-        padding: 25px;
-        overflow-x: auto;
-    }
-
-    .produk {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        min-width: 240px;
-    }
-
-    .produk img {
-        width: 65px;
-        height: 65px;
-        object-fit: cover;
-        border-radius: 10px;
-    }
-
-    .produk strong {
-        display: block;
         margin-bottom: 5px;
     }
 
-    .produk small {
+    .judul-pesanan p {
         color: #777;
+    }
+
+    .kartu-pesanan {
+        background: white;
+        border: 1px solid #eee;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 15px;
+    }
+
+    .produk-pesanan {
+        display: flex;
+        gap: 18px;
+        align-items: center;
+    }
+
+    .produk-pesanan img {
+        width: 90px;
+        height: 90px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .produk-pesanan h3 {
+        font-size: 18px;
+        margin-bottom: 8px;
     }
 
     .status {
         display: inline-block;
         padding: 7px 12px;
         border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-        white-space: nowrap;
+        background: #f1f1f1;
+        font-size: 13px;
     }
 
-    .menunggu {
+    .btn-detail {
+        display: inline-block;
+        margin-top: 15px;
+        background: #111;
+        color: white;
+        text-decoration: none;
+        padding: 9px 16px;
+        border-radius: 7px;
+    }
+
+    .btn-detail:hover {
+        color: white;
+        background: #333;
+    }
+
+    .btn-bayar {
+        display: inline-block;
+        margin-top: 15px;
+        margin-left: 5px;
+        background: #198754;
+        color: white;
+        text-decoration: none;
+        padding: 9px 16px;
+        border-radius: 7px;
+    }
+
+    .btn-bayar:hover {
+        color: white;
+        background: #157347;
+    }
+
+    .pesan-sukses {
+        background: #d1e7dd;
+        color: #0f5132;
+        padding: 12px 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .status-menunggu {
         background: #fff3cd;
         color: #856404;
     }
 
-    .disetujui {
+    .status-disetujui {
+        background: #cff4fc;
+        color: #055160;
+    }
+
+    .status-berhasil {
         background: #d1e7dd;
         color: #0f5132;
     }
 
-    .ditolak {
-        background: #f8d7da;
-        color: #842029;
+    .status-produksi {
+        background: #e2d9f3;
+        color: #432874;
     }
 
-    .aksi {
-        text-decoration: none;
-        color: #111;
-        font-weight: 600;
-        white-space: nowrap;
-    }
-
-    .aksi:hover {
-        text-decoration: underline;
-    }
-
-    .kosong {
-        text-align: center;
-        padding: 50px 20px;
-        color: #777;
-    }
-
-    .berhasil {
+    .status-selesai {
         background: #d1e7dd;
         color: #0f5132;
-        padding: 14px 18px;
-        border-radius: 10px;
-        margin-bottom: 20px;
-    }
-
-    @media (max-width: 768px) {
-        .judul h1 {
-            font-size: 36px;
-        }
     }
 </style>
 
-<section class="pesanan-page">
-    <div class="container">
+<div class="container halaman-pesanan">
 
-        <div class="judul">
-            <small>YOUR ORDERS</small>
-            <h1>Pesanan.</h1>
-            <p>Daftar pesanan custom yang telah dibuat.</p>
+    <div class="judul-pesanan">
+        <h1>Pesanan Saya</h1>
+        <p>Lihat status pesanan dan pembayaran kamu.</p>
+    </div>
+
+    @if(session('success'))
+        <div class="pesan-sukses">
+            {{ session('success') }}
         </div>
+    @endif
 
-        @if (session('success'))
-            <div class="berhasil">
-                {{ session('success') }}
-            </div>
-        @endif
+    @forelse($orders as $order)
 
-        <div class="pesanan-box">
+        <div class="kartu-pesanan">
 
-            @if ($orders->count())
+            <div class="produk-pesanan">
 
-                <table class="table align-middle">
-                    <thead>
-                        <tr>
-                            <th>PRODUCT</th>
-                            <th>COLOR</th>
-                            <th>SIZE</th>
-                            <th>MODEL</th>
-                            <th>QTY</th>
-                            <th>STATUS</th>
-                            <th>AKSI</th>
-                        </tr>
-                    </thead>
+                @if($order->product->image)
+                    <img
+                        src="{{ asset('storage/' . $order->product->image) }}"
+                        alt="{{ $order->product->name }}"
+                    >
+                @endif
 
-                    <tbody>
-                        @foreach ($orders as $order)
-                            <tr>
-                                <td>
-                                    <div class="produk">
-                                        <img
-                                            src="{{ asset('images/' . $order->product->image) }}"
-                                            alt="{{ $order->product->name }}"
-                                        >
+                <div>
 
-                                        <div>
-                                            <strong>{{ $order->product->name }}</strong>
+                    <h3>
+                        {{ $order->product->name }}
+                    </h3>
 
-                                            <small>
-                                                Rp. {{ number_format($order->product->price, 0, ',', '.') }}
-                                            </small>
-                                        </div>
-                                    </div>
-                                </td>
+                    <p>
+                        Jumlah: {{ $order->quantity }}
+                    </p>
 
-                                <td>{{ $order->color }}</td>
+                    @if($order->status === 'Menunggu Konfirmasi')
+                        <span class="status status-menunggu">
+                            Menunggu Konfirmasi
+                        </span>
+                    @elseif($order->status === 'Pesanan Disetujui')
+                        <span class="status status-disetujui">
+                            Pesanan Disetujui
+                        </span>
+                    @elseif($order->status === 'Menunggu Konfirmasi Pembayaran')
+                        <span class="status status-menunggu">
+                            Menunggu Konfirmasi Pembayaran
+                        </span>
+                    @elseif($order->status === 'Pembayaran Berhasil')
+                        <span class="status status-berhasil">
+                            Pembayaran Berhasil
+                        </span>
+                    @elseif($order->status === 'Dalam Produksi')
+                        <span class="status status-produksi">
+                            Dalam Produksi
+                        </span>
+                    @elseif($order->status === 'Selesai')
+                        <span class="status status-selesai">
+                            Selesai
+                        </span>
+                    @else
+                        <span class="status">
+                            {{ $order->status }}
+                        </span>
+                    @endif
 
-                                <td>{{ $order->size }}</td>
-
-                                <td>{{ $order->model }}</td>
-
-                                <td>{{ $order->quantity }}</td>
-
-                                <td>
-                                    @if ($order->status == 'Menunggu Konfirmasi')
-                                        <span class="status menunggu">
-                                            Menunggu Konfirmasi
-                                        </span>
-                                    @elseif ($order->status == 'Disetujui')
-                                        <span class="status disetujui">
-                                            Disetujui
-                                        </span>
-                                    @elseif ($order->status == 'Ditolak')
-                                        <span class="status ditolak">
-                                            Ditolak
-                                        </span>
-                                    @else
-                                        <span class="status menunggu">
-                                            {{ $order->status }}
-                                        </span>
-                                    @endif
-                                </td>
-
-                                <td>
-                                    <a href="{{ route('orders.show', $order) }}" class="aksi">
-                                        Detail →
-                                    </a>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-
-            @else
-
-                <div class="kosong">
-                    Belum ada pesanan.
                 </div>
 
+            </div>
+
+            <a
+                href="{{ route('orders.show', $order->id) }}"
+                class="btn-detail"
+            >
+                Detail Pesanan
+            </a>
+
+            @if($order->status === 'Pesanan Disetujui')
+                <a
+                    href="{{ route('orders.payment', $order->id) }}"
+                    class="btn-bayar"
+                >
+                    Bayar Sekarang
+                </a>
             @endif
 
         </div>
-    </div>
-</section>
+
+    @empty
+
+        <div class="kartu-pesanan">
+            Belum ada pesanan.
+        </div>
+
+    @endforelse
+
+</div>
 
 @endsection
